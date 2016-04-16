@@ -6,8 +6,7 @@
 
 using namespace zxing;
 
-class OpenCVBitmapSource : public LuminanceSource
-{
+class OpenCVBitmapSource : public LuminanceSource{
 private:
     cv::Mat m_pImage;
 

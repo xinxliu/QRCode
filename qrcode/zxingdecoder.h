@@ -4,7 +4,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-//#include "ImageReaderSource.h"
 #include <zxing/common/Counted.h>
 #include <zxing/Binarizer.h>
 #include <zxing/MultiFormatReader.h>
@@ -24,7 +23,6 @@
 #include <zxing/multi/MultipleBarcodeReader.h>
 #include <zxing/multi/GenericMultipleBarcodeReader.h>
 
-//#include "codeformatconvert.h"
 #include "opencvbitmapsource.h"
 
 using namespace std;
