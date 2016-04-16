@@ -1,9 +1,9 @@
 CC=g++ -std=gnu++11
-TARGET=qr-test
+TARGET=./build/qr-test
 #bbs=BufferBitmapSource.o
 SOURCE = qr.cpp
 OBJECTS= opencvbitmapsource.o zxingdecoder.o 
-CFLAGS=-I ./include -L. -lzxing -o
+CFLAGS=-I ./include -L./lib -lzxing -o
 OPENCV = `pkg-config --cflags --libs opencv`
 
 
