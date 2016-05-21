@@ -1,14 +1,22 @@
 #include <opencv2/opencv.hpp>
 #include <string>
+#include <iostream>
 
 
 #include "zxingdecoder.h"
 using namespace zxing;
 using namespace zxing::multi;
 using namespace zxing::qrcode;
+using namespace cv;
+using std::string;
+using std::cout;
+using std::cin;
+using std::endl;
+
 
 void printUsage(){
-std::cout << "./qrcode imagename" << std::endl;
+cout << "./qrcode imagename to parse a qrcode in a image" << endl;
+cout << "./qrcode --camera to parse a qrcode through the camera" << endl;
 }
 
 //parse the cmd
@@ -21,17 +29,42 @@ std::string cmdParse(int argc, char* argv[]) {
 
 }
 int main(int argc,char *argv[]){
-	std::string filename = cmdParse(argc, argv);
-    cv::Mat image = cv::imread(filename);
+	string cmd = cmdParse(argc, argv);
+	if (cmd == string("--camera")) {
+		VideoCapture capture(0);
+		Mat frame;
+		while (1) {
+			capture >> frame;
+			imshow("QRCode Parser", frame);
+			ZxingDecoder zxingdecoder;
+
+			string str = zxingdecoder.decode(frame);
+			cout << str << endl;
+			/*if (str != string("No code detected")) {
+				cout << str << endl;
+				break;
+			}
+			*/
+
+
+
+
+
+			if (char(waitKey(1)) == 'q') {
+				break;
+			}
+		}
+		return 0;
+	}
+	string filename = cmd;
+    Mat image = cv::imread(filename);
 	if (image.empty()) {
-		std::cout << "cannot find the image" << endl;
+		cout << "cannot find the image" << endl;
 		return 0;
 	}
     ZxingDecoder zxingdecoder;
-    //cv::VideoCapture capture(0);
-    //capture >> image;
-    std::string str = zxingdecoder.decode(image);
-    std::cout << str <<endl;
-	while (char(cv::waitKey(1)) != 'q') {};
+    
+    string str = zxingdecoder.decode(image);
+    cout << str <<endl;
 	return 0;
 }

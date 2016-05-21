@@ -18,7 +18,7 @@ public:
     int getWidth() const;   
     int getHeight() const;
 
-    ArrayRef<char> getRow(int y, ArrayRef<char> row) const; //See Zxing Array.h for ArrayRef def
+    ArrayRef<char> getRow(int y, ArrayRef<char> row) const; //Seek Zxing Array.h for ArrayRef def
 
     ArrayRef<char> getMatrix() const;
 };

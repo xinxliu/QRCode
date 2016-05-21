@@ -16,6 +16,8 @@ string ZxingDecoder::decode(cv::Mat& image){
 	else{
 		gray = image.clone();
 	}
+	//clone the gray to source
+	//Ref<> is a resource manager, its constuctor accepts a pointer to the resources
 	Ref<OpenCVBitmapSource> source(new OpenCVBitmapSource(gray));
 	return decodeImage(source);
 }
