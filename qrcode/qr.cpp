@@ -5,7 +5,7 @@
 
 #include "zxingdecoder.h"
 using namespace zxing;
-using namespace zxing::multi;
+
 using namespace zxing::qrcode;
 using namespace cv;
 using std::string;
@@ -33,18 +33,18 @@ int main(int argc,char *argv[]){
 	if (cmd == string("--camera")) {
 		VideoCapture capture(0);
 		Mat frame;
+		namedWindow("QRCode Parser", WINDOW_NORMAL);
 		while (1) {
 			capture >> frame;
 			imshow("QRCode Parser", frame);
 			ZxingDecoder zxingdecoder;
-
 			string str = zxingdecoder.decode(frame);
-			cout << str << endl;
-			/*if (str != string("No code detected")) {
+			if (str != string()) {
 				cout << str << endl;
+				zxingdecoder.showGrayImage();
 				break;
 			}
-			*/
+			
 
 
 
@@ -54,6 +54,7 @@ int main(int argc,char *argv[]){
 				break;
 			}
 		}
+		getchar();
 		return 0;
 	}
 	string filename = cmd;

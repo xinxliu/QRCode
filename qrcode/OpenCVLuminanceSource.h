@@ -6,14 +6,11 @@
 
 using namespace zxing;
 
-class OpenCVBitmapSource : public LuminanceSource{
-private:
-    cv::Mat m_pImage;
-
+class OpenCVLuminanceSource : public LuminanceSource{
 public:
-    OpenCVBitmapSource(cv::Mat &image);
+    OpenCVLuminanceSource(cv::Mat &image);
 
-    ~OpenCVBitmapSource();
+    ~OpenCVLuminanceSource();
 
     int getWidth() const;   
     int getHeight() const;
@@ -21,6 +18,8 @@ public:
     ArrayRef<char> getRow(int y, ArrayRef<char> row) const; //Seek Zxing Array.h for ArrayRef def
 
     ArrayRef<char> getMatrix() const;
+private:
+	cv::Mat image_;
 };
 
 #endif
