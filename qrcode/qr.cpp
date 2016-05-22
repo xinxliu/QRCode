@@ -1,7 +1,6 @@
-#include <opencv2/opencv.hpp>
+﻿#include <opencv2/opencv.hpp>
 #include <string>
 #include <iostream>
-
 
 #include "zxingdecoder.h"
 using namespace zxing;
@@ -13,6 +12,18 @@ using std::cout;
 using std::cin;
 using std::endl;
 
+
+vector<bool> charToBits(vector<char>& a) {
+	vector<bool> bits(8 * a.size(), 0);
+	for (int i = 0; i < a.size(); ++i) {
+		for (int j = 0; j < 8; ++j) {
+			if (a[i] & (0x01 << j)) {
+				bits[8 * i + 7 - j] = 1;
+			}
+		}
+	}
+	return bits;
+}
 
 void printUsage(){
 cout << "./qrcode imagename to parse a qrcode in a image" << endl;
@@ -41,20 +52,23 @@ int main(int argc,char *argv[]){
 			ZxingDecoder zxingdecoder;
 			string str = zxingdecoder.decode(frame);
 			if (str != string()) {
-				cout << str << endl;
+				cout << "The result is a "<<str.size()<<"-long string: " << str << endl;
 				zxingdecoder.showGrayImage();
 				Mat gray = imread("GrayImage.png");
 				imshow("GrayImage",gray);
-				cout<<zxingdecoder.Zxingstr_;
+				//cout<<zxingdecoder.Zxingstr_;
+				//cout << zxingdecoder.bitMap_;
+				auto rawbytes = zxingdecoder.rawBytes_;
+				auto bitstream = charToBits(rawbytes);
+				cout << "The bitstream is "<<bitstream.size()<<"-bits: " << endl;
+				for (int i = 0; i<bitstream.size(); ++i) {
+					cout << bitstream[i];
+					if (!((i + 1) % 8)) cout << " ";
+				}
 				if(char(waitKey(0)) == 'q'){
 					break;
 				}
 			}
-			
-
-
-
-
 
 			if (char(waitKey(1)) == 'q') {
 				break;

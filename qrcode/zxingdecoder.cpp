@@ -1,6 +1,6 @@
 #include "zxingdecoder.h"
 
-ZxingDecoder::ZxingDecoder(){
+ZxingDecoder::ZxingDecoder():Zxingstr_(string()){
 }
 
 ZxingDecoder::~ZxingDecoder(){
@@ -35,7 +35,7 @@ string ZxingDecoder::decodeSource_(Ref<OpenCVLuminanceSource>& source){
 	auto pBitmap = new BinaryBitmap(binarizer);
 	Ref<BinaryBitmap> bitmap(pBitmap);
 	bitMap_ = bitmap->getBlackMatrix();
-	
+
 	QRCodeReader reader;
 	Ref<Result> result;
 	try{
@@ -45,6 +45,8 @@ string ZxingDecoder::decodeSource_(Ref<OpenCVLuminanceSource>& source){
 		//std::cerr<<e.what()<<std::endl;
 		return string();
 	}
-	Zxingstr_ = result->getText(); 
+	//Zxingstr_ == result->getText()->getText()
+	Zxingstr_ = *(result->getText()); 
+	rawBytes_ = (*(result->getRawBytes())).values_;
 	return result->getText()->getText();
 }

@@ -31,8 +31,8 @@ public:
 	cv::Mat gray_;
 	cv::Mat binaryImage_;
 	zxing::String Zxingstr_;
-private:
 	Ref<BitMatrix> bitMap_;
+	vector<char> rawBytes_;
 	string decodeSource_(Ref<OpenCVLuminanceSource>& source);
 };
 
