@@ -34,6 +34,7 @@ int main(int argc,char *argv[]){
 		VideoCapture capture(0);
 		Mat frame;
 		namedWindow("QRCode Parser", WINDOW_NORMAL);
+		namedWindow("GrayImage",WINDOW_NORMAL);
 		while (1) {
 			capture >> frame;
 			imshow("QRCode Parser", frame);
@@ -42,7 +43,12 @@ int main(int argc,char *argv[]){
 			if (str != string()) {
 				cout << str << endl;
 				zxingdecoder.showGrayImage();
-				break;
+				Mat gray = imread("GrayImage.png");
+				imshow("GrayImage",gray);
+				cout<<zxingdecoder.Zxingstr_;
+				if(char(waitKey(0)) == 'q'){
+					break;
+				}
 			}
 			
 

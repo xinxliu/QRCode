@@ -20,12 +20,11 @@ string ZxingDecoder::decode(cv::Mat& image){
 }
 
 void ZxingDecoder::showGrayImage(){
-	cv::imshow("GrayImage", gray_);
 	cv::imwrite("GrayImage.png", gray_);
 }
 
 void ZxingDecoder::showBinaryImage(){
-	cv::imshow("BinaryImage", binaryImage_);
+	cv::imwrite("BinaryImage", binaryImage_);
 }
 
 
@@ -46,5 +45,6 @@ string ZxingDecoder::decodeSource_(Ref<OpenCVLuminanceSource>& source){
 		//std::cerr<<e.what()<<std::endl;
 		return string();
 	}
+	Zxingstr_ = result->getText(); 
 	return result->getText()->getText();
 }

@@ -1,22 +1,22 @@
-CC=g++ -std=gnu++11
+CXX=g++ -std=gnu++14
 
-BIN_DIR=./build
+
 OBJ_DIR=./objs
 
-TARGET=$(BIN_DIR)/qr-test
-OBJECTS= $(OBJ_DIR)/opencvbitmapsource.o $(OBJ_DIR)/zxingdecoder.o 
+TARGET=qrcode
+OBJECTS= $(OBJ_DIR)/OpenCVLuminanceSource.o $(OBJ_DIR)/zxingdecoder.o 
 SOURCE = qr.cpp
 
 CFLAGS=-I ./include -L./lib -lzxing -o
 OPENCV = `pkg-config --cflags --libs opencv`
 
-$(TARGET):chkobjdir chkbindir $(SOURCE) $(OBJECTS)
-	$(CC) $(SOURCE) $(OBJECTS) $(CFLAGS) $(TARGET) $(OPENCV)
+$(TARGET):chkobjdir $(SOURCE) $(OBJECTS)
+	$(CXX) $(SOURCE) $(OBJECTS) $(CFLAGS) $(TARGET) $(OPENCV)
 
-$(OBJ_DIR)/opencvbitmapsource.o:opencvbitmapsource.h
-	g++ -c -o  $(OBJ_DIR)/opencvbitmapsource.o opencvbitmapsource.cpp
-$(OBJ_DIR)/zxingdecoder.o:zxingdecoder.h opencvbitmapsource.h
-	g++ -c -o  $(OBJ_DIR)/zxingdecoder.o zxingdecoder.cpp	
+$(OBJ_DIR)/OpenCVLuminanceSource.o:OpenCVLuminanceSource.h
+	$(CXX) -c -o  $(OBJ_DIR)/OpenCVLuminanceSource.o OpenCVLuminanceSource.cpp
+$(OBJ_DIR)/zxingdecoder.o:zxingdecoder.h OpenCVLuminanceSource.h
+	$(CXX) -c -o  $(OBJ_DIR)/zxingdecoder.o zxingdecoder.cpp	
 
 chkobjdir:
 	@if test ! -d $(OBJ_DIR);\
@@ -24,11 +24,7 @@ chkobjdir:
 		mkdir $(OBJ_DIR);\
 	fi
 	
-chkbindir:
-	@if test ! -d $(BIN_DIR);\
-	then \
-		mkdir $(BIN_DIR);\
-	fi	
+
 
 .PHONY:clean
 clean:

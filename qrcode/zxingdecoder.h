@@ -28,12 +28,11 @@ public:
 	string decode(cv::Mat& image);
 	void showGrayImage();
 	void showBinaryImage();
-	
-private:
 	cv::Mat gray_;
-	Ref<BitMatrix> bitMap_;
 	cv::Mat binaryImage_;
-
+	zxing::String Zxingstr_;
+private:
+	Ref<BitMatrix> bitMap_;
 	string decodeSource_(Ref<OpenCVLuminanceSource>& source);
 };
 
