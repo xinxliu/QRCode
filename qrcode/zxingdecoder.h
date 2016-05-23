@@ -20,21 +20,20 @@ using namespace std;
 using namespace zxing;
 using namespace zxing::qrcode;
 
-class ZxingDecoder
-{
-public:
-	ZxingDecoder();
-	~ZxingDecoder();
-	string decode(cv::Mat& image);
-	void showGrayImage();
-	void showBinaryImage();
-	cv::Mat gray_;
-	cv::Mat binaryImage_;
-	int BlackPoint_;
-	zxing::String Zxingstr_;
-	Ref<BitMatrix> bitMap_;
-	vector<char> rawBytes_;
-	string decodeSource_(Ref<OpenCVLuminanceSource>& source);
-};
-
+namespace xZxingDecoder {
+	class ZxingDecoder
+	{
+	public:
+		ZxingDecoder();
+		~ZxingDecoder();
+		string decode(cv::Mat& image);
+		void writeGrayImage();
+		cv::Mat gray_;
+		int BlackPoint_;
+		zxing::String Zxingstr_;
+		Ref<BitMatrix> bitMap_;
+		vector<char> rawBytes_;
+		string decodeSource_(Ref<OpenCVLuminanceSource>& source);
+	};
+}
 #endif

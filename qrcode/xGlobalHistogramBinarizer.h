@@ -32,7 +32,7 @@ private:
   ArrayRef<char> luminances;
   ArrayRef<int> buckets;
 public:
-  friend class zxingdecoder;
+
   xGlobalHistogramBinarizer(Ref<LuminanceSource> source);
   virtual ~xGlobalHistogramBinarizer();
 		
@@ -40,8 +40,7 @@ public:
   virtual Ref<BitMatrix> getBlackMatrix();
   static int estimateBlackPoint(ArrayRef<int> const& buckets);
   Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source);
-  int getBlackPoint_();
-private:
+
   int BlackPoint_;
   void initArrays(int luminanceSize);
 };

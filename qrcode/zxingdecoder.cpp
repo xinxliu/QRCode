@@ -1,52 +1,46 @@
 #include "zxingdecoder.h"
-
-ZxingDecoder::ZxingDecoder():Zxingstr_(string()){
-}
-
-ZxingDecoder::~ZxingDecoder(){
-}
-
-string ZxingDecoder::decode(cv::Mat& image){
-	if(image.channels() != 1){
-		cv::cvtColor(image, gray_, CV_BGR2GRAY);
+namespace xZxingDecoder {
+	ZxingDecoder::ZxingDecoder() :Zxingstr_(string()) {
 	}
-	else{
-		gray_ = image.clone();
+
+	ZxingDecoder::~ZxingDecoder() {
 	}
-	//clone the gray to source
-	//Ref<> is a resource manager, its constuctor accepts a pointer to the resources
-	Ref<OpenCVLuminanceSource> source(new OpenCVLuminanceSource(gray_));
-	return decodeSource_(source);
-}
 
-void ZxingDecoder::showGrayImage(){
-	cv::imwrite("GrayImage.png", gray_);
-}
-
-void ZxingDecoder::showBinaryImage(){
-	cv::imwrite("BinaryImage", binaryImage_);
-}
-
-
-string ZxingDecoder::decodeSource_(Ref<OpenCVLuminanceSource>& source){
-	auto pBinarizer = new xGlobalHistogramBinarizer(source);
-	Ref<Binarizer> binarizer(pBinarizer);
-	
-	auto pBitmap = new BinaryBitmap(binarizer);
-	Ref<BinaryBitmap> bitmap(pBitmap);
-	bitMap_ = bitmap->getBlackMatrix();
-
-	QRCodeReader reader;
-	Ref<Result> result;
-	try{
-		result = reader.decode(bitmap, DecodeHints(DecodeHints::TRYHARDER_HINT));
+	string ZxingDecoder::decode(cv::Mat& image) {
+		if (image.channels() != 1) {
+			cv::cvtColor(image, gray_, CV_BGR2GRAY);
+		}
+		else {
+			gray_ = image.clone();
+		}
+		//clone the gray to source
+		//Ref<> is a resource manager, its constuctor accepts a pointer to the resources
+		Ref<OpenCVLuminanceSource> source(new OpenCVLuminanceSource(gray_));
+		return decodeSource_(source);
 	}
-	catch(const std::exception& e){
-		//std::cerr<<e.what()<<std::endl;
-		return string();
+
+	void ZxingDecoder::writeGrayImage() {
+		cv::imwrite("GrayImage.png", gray_);
 	}
-	//Zxingstr_ == result->getText()->getText()
-	Zxingstr_ = *(result->getText()); 
-	rawBytes_ = (*(result->getRawBytes())).values_;
-	return result->getText()->getText();
+
+	string ZxingDecoder::decodeSource_(Ref<OpenCVLuminanceSource>& source) {
+		auto pBinarizer = new xGlobalHistogramBinarizer(source);
+		Ref<Binarizer> binarizer(pBinarizer);
+		bitMap_ = pBinarizer->getBlackMatrix();
+		BlackPoint_ = pBinarizer->BlackPoint_;
+		auto pBitmap = new BinaryBitmap(binarizer);
+		Ref<BinaryBitmap> bitmap(pBitmap);
+		QRCodeReader reader;
+		Ref<Result> result;
+		try {
+			result = reader.decode(bitmap, DecodeHints(DecodeHints::TRYHARDER_HINT));
+		}
+		catch (const std::exception& e) {
+			//std::cerr<<e.what()<<std::endl;
+			return string();
+		}
+		Zxingstr_ = *(result->getText());
+		rawBytes_ = (*(result->getRawBytes())).values_;
+		return result->getText()->getText();
+	}
 }

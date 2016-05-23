@@ -11,7 +11,7 @@ using std::string;
 using std::cout;
 using std::cin;
 using std::endl;
-
+using xZxingDecoder::ZxingDecoder;
 
 vector<int> charToBits(vector<char>& a) {
 	vector<int> bits(8 * a.size(), 0);
@@ -46,18 +46,29 @@ int main(int argc,char *argv[]){
 		Mat frame;
 		namedWindow("QRCode Parser", WINDOW_NORMAL);
 		namedWindow("GrayImage",WINDOW_NORMAL);
+		namedWindow("Binarized Image", WINDOW_NORMAL);
 		while (1) {
 			capture >> frame;
 			imshow("QRCode Parser", frame);
 			ZxingDecoder zxingdecoder;
 			string str = zxingdecoder.decode(frame);
+
 			if (str != string()) {
-				cout << "The result is a "<<str.size()<<"-long string: " << str << endl;
-				zxingdecoder.showGrayImage();
-				Mat gray = imread("GrayImage.png");
+				//show the result string
+				cout << "The result is a "<<str.size()<<"-character(s) string: " << str << endl;
+				//show the gray image
+				Mat gray = zxingdecoder.gray_;
 				imshow("GrayImage",gray);
-				//cout<<zxingdecoder.Zxingstr_;
-				//cout << zxingdecoder.bitMap_;
+				//show the binarized image
+				auto bina = gray.clone();
+				int blackPoint = zxingdecoder.BlackPoint_;
+				for (int i = 0; i < bina.rows; ++i) {
+					for (int j = 0; j < bina.cols; ++j) {
+						bina.at<uchar>(i, j) = bina.at<uchar>(i, j)>blackPoint ? 255 : 0;
+					}
+				}
+				imshow("Binarized Image", bina);
+				//show the rawbytes
 				auto rawbytes = zxingdecoder.rawBytes_;
 				auto bitstream = charToBits(rawbytes);
 				cout << "The bitstream is "<<bitstream.size()<<"-bits: " << endl;
@@ -67,6 +78,7 @@ int main(int argc,char *argv[]){
 					if (!((count + 1) % 8)) {cout << " ";}
 					if (!((count++ + 1) % 64)) {cout<<endl;}
 				}
+
 				if(char(waitKey(0)) == 'q'){
 					break;
 				}
@@ -86,7 +98,6 @@ int main(int argc,char *argv[]){
 		return 0;
 	}
     ZxingDecoder zxingdecoder;
-    
     string str = zxingdecoder.decode(image);
     cout << str <<endl;
 	return 0;

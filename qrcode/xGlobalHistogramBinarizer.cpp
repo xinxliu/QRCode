@@ -117,7 +117,7 @@ Ref<BitMatrix> xGlobalHistogramBinarizer::getBlackMatrix() {
   }
 
   int blackPoint = estimateBlackPoint(localBuckets);
-
+  BlackPoint_ = blackPoint;
   ArrayRef<char> localLuminances = source.getMatrix();
   for (int y = 0; y < height; y++) {
     int offset = y * width;
