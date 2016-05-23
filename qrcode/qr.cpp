@@ -13,8 +13,8 @@ using std::cin;
 using std::endl;
 
 
-vector<bool> charToBits(vector<char>& a) {
-	vector<bool> bits(8 * a.size(), 0);
+vector<int> charToBits(vector<char>& a) {
+	vector<int> bits(8 * a.size(), 0);
 	for (int i = 0; i < a.size(); ++i) {
 		for (int j = 0; j < 8; ++j) {
 			if (a[i] & (0x01 << j)) {
@@ -61,9 +61,11 @@ int main(int argc,char *argv[]){
 				auto rawbytes = zxingdecoder.rawBytes_;
 				auto bitstream = charToBits(rawbytes);
 				cout << "The bitstream is "<<bitstream.size()<<"-bits: " << endl;
-				for (int i = 0; i<bitstream.size(); ++i) {
-					cout << bitstream[i];
-					if (!((i + 1) % 8)) cout << " ";
+				int count = 0;
+				for (auto it = bitstream.begin(); it != bitstream.end(); ++it) {
+					cout << *it;
+					if (!((count + 1) % 8)) {cout << " ";}
+					if (!((count++ + 1) % 64)) {cout<<endl;}
 				}
 				if(char(waitKey(0)) == 'q'){
 					break;

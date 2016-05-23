@@ -4,7 +4,7 @@ CXX=g++ -std=gnu++14
 OBJ_DIR=./objs
 
 TARGET=qrcode
-OBJECTS= $(OBJ_DIR)/OpenCVLuminanceSource.o $(OBJ_DIR)/zxingdecoder.o 
+OBJECTS= $(OBJ_DIR)/OpenCVLuminanceSource.o $(OBJ_DIR)/zxingdecoder.o $(OBJ_DIR)/xGlobalHistogramBinarizer.o 
 SOURCE = qr.cpp
 
 CFLAGS=-I ./include -L./lib -lzxing -o
@@ -15,6 +15,8 @@ $(TARGET):chkobjdir $(SOURCE) $(OBJECTS)
 
 $(OBJ_DIR)/OpenCVLuminanceSource.o:OpenCVLuminanceSource.h
 	$(CXX) -c -o  $(OBJ_DIR)/OpenCVLuminanceSource.o OpenCVLuminanceSource.cpp
+$(OBJ_DIR)/xGlobalHistogramBinarizer.o:xGlobalHistogramBinarizer.h
+	$(CXX) -c -o  $(OBJ_DIR)/xGlobalHistogramBinarizer.o xGlobalHistogramBinarizer.cpp
 $(OBJ_DIR)/zxingdecoder.o:zxingdecoder.h OpenCVLuminanceSource.h
 	$(CXX) -c -o  $(OBJ_DIR)/zxingdecoder.o zxingdecoder.cpp	
 

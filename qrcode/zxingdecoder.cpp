@@ -29,7 +29,7 @@ void ZxingDecoder::showBinaryImage(){
 
 
 string ZxingDecoder::decodeSource_(Ref<OpenCVLuminanceSource>& source){
-	auto pBinarizer = new GlobalHistogramBinarizer(source);
+	auto pBinarizer = new xGlobalHistogramBinarizer(source);
 	Ref<Binarizer> binarizer(pBinarizer);
 	
 	auto pBitmap = new BinaryBitmap(binarizer);

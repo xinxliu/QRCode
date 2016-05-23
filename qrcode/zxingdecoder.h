@@ -8,7 +8,7 @@
 #include <zxing/Binarizer.h>
 #include <zxing/Result.h>
 #include <zxing/ReaderException.h>
-#include <zxing/common/GlobalHistogramBinarizer.h>
+#include "xGlobalHistogramBinarizer.h"
 #include <zxing/Exception.h>
 #include <zxing/BinaryBitmap.h>
 #include <zxing/DecodeHints.h>
@@ -30,6 +30,7 @@ public:
 	void showBinaryImage();
 	cv::Mat gray_;
 	cv::Mat binaryImage_;
+	int BlackPoint_;
 	zxing::String Zxingstr_;
 	Ref<BitMatrix> bitMap_;
 	vector<char> rawBytes_;
