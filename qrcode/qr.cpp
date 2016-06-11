@@ -42,6 +42,7 @@ int main(int argc,char *argv[]){
 				}
 				imshow("Binarized Image", bina);
 				//show the orignal bitstream
+				cout<<"=================================START==========================="<<endl;
 				auto bits = zxingdecoder.bits_;
 				auto oriBitstream = BitMatToBits(bits);
 				cout << "The original bitstream is " << oriBitstream.size() << "-bits: " << endl;
@@ -52,6 +53,7 @@ int main(int argc,char *argv[]){
 					if (!((count++ + 1) % 64)) { cout << endl; }
 				}
 				//show the rawbytes
+				cout<<"================================================================="<<endl;
 				auto rawbytes = zxingdecoder.rawBytes_;
 				auto bitstream = charToBits(rawbytes);
 				cout << "The bitstream is "<<bitstream.size()<<"-bits: " << endl;
@@ -62,7 +64,9 @@ int main(int argc,char *argv[]){
 					if (!((count++ + 1) % 64)) {cout<<endl;}
 				}
 				//show the result string
+				cout<<"================================================================="<<endl;
 				cout << "The result is a " << str.size() << "-character(s) string: " << str << endl;
+				cout<<"===============================END==============================="<<endl;
 				if(char(waitKey(0)) == 'q'){
 					break;
 				}
