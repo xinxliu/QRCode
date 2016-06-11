@@ -1,5 +1,5 @@
-#ifndef __OPENCVBITMAPSOURCE_H__
-#define __OPENCVBITMAPSOURCE_H__
+#ifndef _OPENCVLUMINANCESOURCE_H_
+#define _OPENCVLUMINANCESOURCE_H_
 
 #include <zxing/LuminanceSource.h>
 #include <opencv2/opencv.hpp>

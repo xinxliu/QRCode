@@ -1,23 +1,33 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
 
-using namespace std;
-int main() {
-	vector<char> a = { 'a','b','c' };
-	vector<bool> bits(8 * a.size(), 0);
-	for (int i = 0; i < a.size(); ++i) {
-		for (int j = 0; j < 8; ++j) {
-			if (a[i] & (0x01 << j)) {
-				bits[8 * i + 7 - j] = 1;
-				
-			}
+
+#include <zxing/qrcode/QRCodeReader.h>
+#include <zxing/qrcode/detector/Detector.h>
+
+#include <iostream>
+
+namespace zxing {
+	namespace qrcode {
+
+		using namespace std;
+
+		QRCodeReader::QRCodeReader() :decoder_() {
+		}
+		//TODO: see if any of the other files in the qrcode tree need tryHarder
+		Ref<Result> QRCodeReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
+			Detector detector(image->getBlackMatrix());
+			Ref<DetectorResult> detectorResult(detector.detect(hints));
+			ArrayRef< Ref<ResultPoint> > points(detectorResult->getPoints());
+			Ref<DecoderResult> decoderResult(decoder_.decode(detectorResult->getBits()));
+			Ref<Result> result(
+				new Result(decoderResult->getText(), decoderResult->getRawBytes(), points, BarcodeFormat::QR_CODE));
+			return result;
+		}
+
+		QRCodeReader::~QRCodeReader() {
+		}
+
+		Decoder& QRCodeReader::getDecoder() {
+			return decoder_;
 		}
 	}
-	
-	for (int i = 0; i < bits.size(); ++i) {
-		cout << bits[i];
-	}
-	getchar();
-	return 0;
 }

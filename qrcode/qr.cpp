@@ -2,60 +2,33 @@
 #include <string>
 #include <iostream>
 
-#include "zxingdecoder.h"
+#include "QRCodeDecoder.h"
+#include "utility.h"
 using namespace zxing;
 
 using namespace zxing::qrcode;
 using namespace cv;
-using std::string;
-using std::cout;
-using std::cin;
-using std::endl;
-using xZxingDecoder::ZxingDecoder;
+using namespace std; 
+using xQRCodeDecoder::QRCodeDecoder;
 
-vector<int> charToBits(vector<char>& a) {
-	vector<int> bits(8 * a.size(), 0);
-	for (int i = 0; i < a.size(); ++i) {
-		for (int j = 0; j < 8; ++j) {
-			if (a[i] & (0x01 << j)) {
-				bits[8 * i + 7 - j] = 1;
-			}
-		}
-	}
-	return bits;
-}
 
-void printUsage(){
-cout << "./qrcode imagename to parse a qrcode in a image" << endl;
-cout << "./qrcode --camera to parse a qrcode through the camera" << endl;
-}
-
-//parse the cmd
-std::string cmdParse(int argc, char* argv[]) {
-	if (argc != 2) {
-		printUsage();
-		return std::string();
-	}
-	return std::string(argv[1]);
-
-}
 int main(int argc,char *argv[]){
 	string cmd = cmdParse(argc, argv);
 	if (cmd == string("--camera")) {
 		VideoCapture capture(0);
 		Mat frame;
+		//initialize the result
 		namedWindow("QRCode Parser", WINDOW_NORMAL);
 		namedWindow("GrayImage",WINDOW_NORMAL);
 		namedWindow("Binarized Image", WINDOW_NORMAL);
 		while (1) {
 			capture >> frame;
 			imshow("QRCode Parser", frame);
-			ZxingDecoder zxingdecoder;
+			QRCodeDecoder zxingdecoder;
 			string str = zxingdecoder.decode(frame);
 
 			if (str != string()) {
-				//show the result string
-				cout << "The result is a "<<str.size()<<"-character(s) string: " << str << endl;
+				
 				//show the gray image
 				Mat gray = zxingdecoder.gray_;
 				imshow("GrayImage",gray);
@@ -68,17 +41,28 @@ int main(int argc,char *argv[]){
 					}
 				}
 				imshow("Binarized Image", bina);
+				//show the orignal bitstream
+				auto bits = zxingdecoder.bits_;
+				auto oriBitstream = BitMatToBits(bits);
+				cout << "The original bitstream is " << oriBitstream.size() << "-bits: " << endl;
+				int count = 0;
+				for (auto it = oriBitstream.begin(); it != oriBitstream.end(); ++it) {
+					cout << *it;
+					if (!((count + 1) % 8)) { cout << " "; }
+					if (!((count++ + 1) % 64)) { cout << endl; }
+				}
 				//show the rawbytes
 				auto rawbytes = zxingdecoder.rawBytes_;
 				auto bitstream = charToBits(rawbytes);
 				cout << "The bitstream is "<<bitstream.size()<<"-bits: " << endl;
-				int count = 0;
+				count = 0;
 				for (auto it = bitstream.begin(); it != bitstream.end(); ++it) {
 					cout << *it;
 					if (!((count + 1) % 8)) {cout << " ";}
 					if (!((count++ + 1) % 64)) {cout<<endl;}
 				}
-
+				//show the result string
+				cout << "The result is a " << str.size() << "-character(s) string: " << str << endl;
 				if(char(waitKey(0)) == 'q'){
 					break;
 				}
@@ -97,8 +81,30 @@ int main(int argc,char *argv[]){
 		cout << "cannot find the image" << endl;
 		return 0;
 	}
-    ZxingDecoder zxingdecoder;
+    QRCodeDecoder zxingdecoder;
     string str = zxingdecoder.decode(image);
+	//original bitstream
+	auto bits = zxingdecoder.bits_;
+	auto oriBitstream = BitMatToBits(bits);
+	cout << "The original bitstream is " << oriBitstream.size() << "-bits: " << endl;
+	int count = 0;
+	for (auto it = oriBitstream.begin(); it != oriBitstream.end(); ++it) {
+		cout << *it;
+		if (!((count + 1) % 8)) { cout << " "; }
+		if (!((count++ + 1) % 64)) { cout << endl; }
+	}
+	//rawBytes
+	auto rawbytes = zxingdecoder.rawBytes_;
+	auto bitstream = charToBits(rawbytes);
+	cout << "The bitstream is " << bitstream.size() << "-bits: " << endl;
+	count = 0;
+	for (auto it = bitstream.begin(); it != bitstream.end(); ++it) {
+		cout << *it;
+		if (!((count + 1) % 8)) { cout << " "; }
+		if (!((count++ + 1) % 64)) { cout << endl; }
+	}
+	cout << endl;
     cout << str <<endl;
+	getchar();
 	return 0;
 }
