@@ -53,6 +53,7 @@ int main(int argc,char *argv[]){
 					if (!((count++ + 1) % 64)) { cout << endl; }
 				}
 				//show the rawbytes
+				cout<<endl;
 				cout<<"================================================================="<<endl;
 				auto rawbytes = zxingdecoder.rawBytes_;
 				auto bitstream = charToBits(rawbytes);
@@ -64,6 +65,7 @@ int main(int argc,char *argv[]){
 					if (!((count++ + 1) % 64)) {cout<<endl;}
 				}
 				//show the result string
+				cout<<endl;
 				cout<<"================================================================="<<endl;
 				cout << "The result is a " << str.size() << "-character(s) string: " << str << endl;
 				cout<<"===============================END==============================="<<endl;
