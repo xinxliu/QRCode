@@ -14,15 +14,16 @@ $(TARGET):chkobjdir $(SOURCE) $(OBJECTS)
 	$(CXX) $(SOURCE) $(OBJECTS) $(CFLAGS) $(TARGET) $(OPENCV)
 
 $(OBJ_DIR)/OpenCVLuminanceSource.o:OpenCVLuminanceSource.h
-	$(CXX) -c -o  $(OBJ_DIR)/OpenCVLuminanceSource.o OpenCVLuminanceSource.cpp
+	$(CXX) -I ./include -c -o  $(OBJ_DIR)/OpenCVLuminanceSource.o OpenCVLuminanceSource.cpp
 $(OBJ_DIR)/xGlobalHistogramBinarizer.o:xGlobalHistogramBinarizer.h
-	$(CXX) -c -o  $(OBJ_DIR)/xGlobalHistogramBinarizer.o xGlobalHistogramBinarizer.cpp
+	$(CXX) -I ./include -c -o  $(OBJ_DIR)/xGlobalHistogramBinarizer.o xGlobalHistogramBinarizer.cpp
 $(OBJ_DIR)/xQRCodeReader.o:xQRCodeReader.h
-	$(CXX) -c -o  $(OBJ_DIR)/xQRCodeReader.o xQRCodeReader.cpp
+	$(CXX) -I ./include -c -o  $(OBJ_DIR)/xQRCodeReader.o xQRCodeReader.cpp
 $(OBJ_DIR)/utility.o:utility.h
-	$(CXX) -c -o  $(OBJ_DIR)/utility.o utility.cpp
-$(OBJ_DIR)/zxingdecoder.o:QRCodeDecoder.h OpenCVLuminanceSource.h
-	$(CXX) -c -o  $(OBJ_DIR)/QRCodeDecoder.o QRCodeDecoder.cpp	
+	$(CXX) -I ./include -c -o  $(OBJ_DIR)/utility.o utility.cpp
+
+$(OBJ_DIR)/QRCodeDecoder.o:QRCodeDecoder.h OpenCVLuminanceSource.h
+	$(CXX) -I ./include -c -o  $(OBJ_DIR)/QRCodeDecoder.o QRCodeDecoder.cpp	
 
 chkobjdir:
 	@if test ! -d $(OBJ_DIR);\
